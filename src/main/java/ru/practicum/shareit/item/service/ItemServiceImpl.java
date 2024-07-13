@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.ItemMapper;
@@ -14,17 +15,20 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
 
     @Override
     public Collection<ItemDto> findAll() {
+        log.info("Find all items");
         return ItemMapper.toItemsDtoCollection(itemRepository.findAll());
     }
 
     @Override
     public ItemDto create(Long userId, ItemDto itemDto) {
+        log.info("Create new item");
         validation(userId, null);
         return ItemMapper.toItemDto(itemRepository.create(
                 Item.builder()
@@ -39,6 +43,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto update(Long userId, Long itemId, ItemDto itemDto) {
+        log.info("Update item");
         validation(userId, itemId);
         itemDto.setId(itemId);
         return ItemMapper.toItemDto(itemRepository.update(ItemMapper.toItem(itemDto)));
@@ -46,26 +51,31 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto findItemById(Long itemId) {
+        log.info("Find item by id");
         return ItemMapper.toItemDto(itemRepository.findItemById(itemId));
     }
 
     @Override
     public Collection<ItemDto> findItemsByUserId(Long userId) {
+        log.info("Find items by id");
         return ItemMapper.toItemsDtoCollection(itemRepository.findItemsByUserId(userId));
     }
 
     @Override
     public void delete(Long itemId) {
+        log.info("Delete item");
         itemRepository.delete(itemId);
     }
 
     @Override
     public Collection<ItemDto> findItemsByText(String text) {
+        log.info("Find items by text");
         if (text.isBlank() || text.isEmpty()) return List.of();
         return ItemMapper.toItemsDtoCollection(itemRepository.findItemsByText(text));
     }
 
     private void validation(Long userId, Long itemId) {
+        log.info("Validate item");
         if (userId == null) {
             throw new ValidationException("Id владельца не указано");
         }

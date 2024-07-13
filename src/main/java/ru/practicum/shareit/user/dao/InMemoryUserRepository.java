@@ -19,11 +19,13 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public Collection<User> findAll() {
+        log.info("Finding all users");
         return users.values();
     }
 
     @Override
     public User create(User user) {
+        log.info("Creating user {}", user);
         isUserEmailExist(user.getEmail());
         user.setId(nextID++);
         users.put(user.getId(), user);
@@ -32,12 +34,14 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public void delete(Long userId) {
+        log.info("Deleting user {}", userId);
         isUserExist(userId);
         users.remove(userId);
     }
 
     @Override
     public User update(User newUser) {
+        log.info("Updating user {}", newUser);
         isUserExist(newUser.getId());
         User user = users.get(newUser.getId());
         if (newUser.getEmail() != null && !newUser.getEmail().equals(user.getEmail())) {
@@ -52,12 +56,14 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public User findUserById(Long userId) {
+        log.info("Finding user {}", userId);
         isUserExist(userId);
         return users.get(userId);
     }
 
     @Override
     public void isUserEmailExist(String email) {
+        log.info("Checking if user exists with email {}", email);
         if (users.values().stream().anyMatch(user -> user.getEmail().equals(email))) {
             throw new AlreadyExistsException("Email " + email + " занят!");
         }
@@ -65,6 +71,7 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public void isUserExist(Long userId) {
+        log.info("Checking if user exists with id {}", userId);
         if (!users.containsKey(userId)) {
             throw new NotFoundException("User id = " + userId + " не найден!");
         }
