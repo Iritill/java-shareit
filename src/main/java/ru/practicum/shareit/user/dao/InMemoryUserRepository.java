@@ -58,14 +58,14 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public void isUserEmailExist(String email) {
-        if(users.values().stream().anyMatch(user -> user.getEmail().equals(email))) {
+        if (users.values().stream().anyMatch(user -> user.getEmail().equals(email))) {
             throw new AlreadyExistsException("Email " + email + " занят!");
         }
     }
 
     @Override
     public void isUserExist(Long userId) {
-        if(!users.containsKey(userId)) {
+        if (!users.containsKey(userId)) {
             throw new NotFoundException("User id = " + userId + " не найден!");
         }
     }
