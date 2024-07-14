@@ -1,16 +1,11 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.item.mapper;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 
-import java.util.Collection;
-
+@UtilityClass
 public class ItemMapper {
-    public static Collection<ItemDto> toItemsDtoCollection(Collection<Item> items) {
-        return items.stream()
-                .map(ItemMapper::toItemDto)
-                .toList();
-    }
 
     public static ItemDto toItemDto(Item item) {
         return new ItemDto(

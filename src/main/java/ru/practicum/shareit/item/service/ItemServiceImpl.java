@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.item.ItemMapper;
+import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
@@ -23,7 +23,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Collection<ItemDto> findAll() {
         log.info("Find all items");
-        return ItemMapper.toItemsDtoCollection(itemRepository.findAll());
+        return itemRepository.findAll().stream()
+                .map(ItemMapper::toItemDto)
+                .toList();
     }
 
     @Override
@@ -58,7 +60,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Collection<ItemDto> findItemsByUserId(Long userId) {
         log.info("Find items by id");
-        return ItemMapper.toItemsDtoCollection(itemRepository.findItemsByUserId(userId));
+        return itemRepository.findItemsByUserId(userId).stream()
+                .map(ItemMapper::toItemDto)
+                .toList();
     }
 
     @Override
@@ -71,7 +75,9 @@ public class ItemServiceImpl implements ItemService {
     public Collection<ItemDto> findItemsByText(String text) {
         log.info("Find items by text");
         if (text.isBlank() || text.isEmpty()) return List.of();
-        return ItemMapper.toItemsDtoCollection(itemRepository.findItemsByText(text));
+        return itemRepository.findItemsByText(text).stream()
+                .map(ItemMapper::toItemDto)
+                .toList();
     }
 
     private void validation(Long userId, Long itemId) {

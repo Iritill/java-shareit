@@ -16,9 +16,6 @@ import jakarta.validation.Valid;
 
 import java.util.Collection;
 
-/**
- * TODO Sprint add-controllers.
- */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/users")
