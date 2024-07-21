@@ -34,8 +34,8 @@ public class BookingServiceImpl implements BookingService {
         validate(ownerId, bookingRequestDto);
         Item item = itemRepository.findById(bookingRequestDto.getItemId()).orElseThrow(() -> new NotFoundException("Item not found"));
         User user = userRepository.findById(ownerId).orElseThrow(() -> new NotFoundException("User not found"));
-        return BookingMapper.toBookingDto(bookingRepository.save(Booking.builder().start(bookingRequestDto.getStart()).
-                end(bookingRequestDto.getEnd())
+        return BookingMapper.toBookingDto(bookingRepository.save(Booking.builder().start(bookingRequestDto.getStart())
+                .end(bookingRequestDto.getEnd())
                 .item(item)
                 .booker(user)
                 .status(BookingStatus.WAITING)
@@ -47,13 +47,13 @@ public class BookingServiceImpl implements BookingService {
         log.info("Approve booking request: {}", bookingId);
         userExist(userId);
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("Booking not found"));
-        if(!booking.getItem().getOwner().getId().equals(userId)) {
+        if (!booking.getItem().getOwner().getId().equals(userId)) {
             throw new NotFoundException("User isn`t owner");
         }
-        if(booking.getStatus().equals(BookingStatus.APPROVED)) {
+        if (booking.getStatus().equals(BookingStatus.APPROVED)) {
             throw new ValidationException("Booking is already approved");
         }
-        if(isApproved) {
+        if (isApproved) {
             booking.setStatus(BookingStatus.APPROVED);
         } else {
             booking.setStatus(BookingStatus.REJECTED);

@@ -20,6 +20,7 @@ public class ItemMapper {
                 item.getAvailable()
         );
     }
+
     public static ItemInfoDto toItemInfoDto(Item item, BookingDateInfoDto lastBooking, BookingDateInfoDto nextBooking, Collection<CommentDto> commentDto) {
         if (item == null) return null;
         return ItemInfoDto.builder()
