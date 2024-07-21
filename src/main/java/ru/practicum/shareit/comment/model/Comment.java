@@ -1,10 +1,6 @@
-package ru.practicum.shareit.booking.model;
+package ru.practicum.shareit.comment.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import ru.practicum.shareit.item.model.Item;
@@ -19,29 +16,25 @@ import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "bookings")
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-public class Booking {
+@Entity
+@Table(name = "comments")
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
-    @Column(name = "start_date")
-    private LocalDateTime start;
-    @NotNull
-    @Column(name = "end_date")
-    private LocalDateTime end;
+    @NotBlank
+    private String text;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booker_id")
-    private User booker;
-    @Enumerated(EnumType.STRING)
-    private BookingStatus status;
+    @JoinColumn(name = "author_id")
+    private User author;
+    @NotNull
+    private LocalDateTime created;
 }
