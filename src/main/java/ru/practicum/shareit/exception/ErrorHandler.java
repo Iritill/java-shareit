@@ -39,8 +39,8 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handlerAnyException(final RuntimeException e) {
         return new ErrorResponse(
-                "Внутренняя ошибка сервера",
-                e.getMessage()
+                e.getMessage(),
+                "Внутренняя ошибка сервера"
         );
     }
 }
