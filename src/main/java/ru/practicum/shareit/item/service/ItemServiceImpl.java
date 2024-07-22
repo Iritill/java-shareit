@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dao.BookingRepository;
+import ru.practicum.shareit.booking.dto.BookingDateInfoDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.comment.dao.CommentRepository;
@@ -84,12 +85,11 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemInfoDto findItemById(Long userId, Long itemId) {
         log.info("Find item by id");
-        return ItemMapper.toItemInfoDto(
-                itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item (id " + itemId + ") not found!")),
-                BookingMapper.toBookingDateInfoDto(bookingRepository.findFirstByItemIdAndItemOwnerIdAndStartBeforeAndStatusOrderByStartDesc(itemId, userId, LocalDateTime.now(), BookingStatus.APPROVED).orElse(null)),
-                BookingMapper.toBookingDateInfoDto(bookingRepository.findFirstByItemIdAndItemOwnerIdAndStartAfterAndStatusOrderByStartAsc(itemId, userId, LocalDateTime.now(), BookingStatus.APPROVED).orElse(null)),
-                CommentMapper.toCommentsDtoCollection(commentRepository.findAllByItemId(itemId))
-        );
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item (id " + itemId + ") not found!"));
+        BookingDateInfoDto last = BookingMapper.toBookingDateInfoDto(bookingRepository.findFirstByItemIdAndItemOwnerIdAndStartBeforeAndStatusOrderByStartDesc(itemId, userId, LocalDateTime.now(), BookingStatus.APPROVED).orElse(null));
+        BookingDateInfoDto next = BookingMapper.toBookingDateInfoDto(bookingRepository.findFirstByItemIdAndItemOwnerIdAndStartAfterAndStatusOrderByStartAsc(itemId, userId, LocalDateTime.now(), BookingStatus.APPROVED).orElse(null));
+        Collection<CommentDto> comments = CommentMapper.toCommentsDtoCollection(commentRepository.findAllByItemId(itemId));
+        return ItemMapper.toItemInfoDto(item, last, next, comments);
     }
 
     @Override

@@ -17,30 +17,31 @@ import java.util.Collection;
 @RequestMapping("/items")
 @Slf4j
 public class ItemController {
+    private final String header = "X-Sharer-User-Id";
     private final ItemService itemService;
 
     @GetMapping
-    public Collection<ItemInfoDto> findAll(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public Collection<ItemInfoDto> findAll(@RequestHeader(header) Long userId) {
         log.info("Find all items");
         return itemService.findItemsByUserId(userId);
     }
 
     @GetMapping("/{itemId}")
-    public ItemInfoDto getItemDto(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public ItemInfoDto getItemDto(@RequestHeader(header) Long userId,
                                   @PathVariable Long itemId) {
         log.info("Get item dto");
         return itemService.findItemById(userId, itemId);
     }
 
     @PostMapping
-    public ItemDto create(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public ItemDto create(@RequestHeader(header) Long userId,
                           @Valid @RequestBody ItemDto itemDto) {
         log.info("Create item");
         return itemService.create(userId, itemDto);
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto update(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public ItemDto update(@RequestHeader(header) Long userId,
                           @PathVariable Long itemId,
                           @RequestBody ItemDto itemDto) {
         log.info("Update item");
@@ -48,7 +49,7 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDto addComment(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public CommentDto addComment(@RequestHeader(header) Long userId,
                                  @PathVariable Long itemId,
                                  @RequestBody CommentRequestDto commentRequestDto) {
         log.info("Add comment");
