@@ -64,7 +64,7 @@ public class ItemServiceImpl implements ItemService {
             throw new ValidationException("Comment is empty!");
         }
         if (bookingRepository.findAllByBookerIdAndItemIdAndStatusAndEndBefore(
-                userId, itemId, BookingStatus.APPROVED, LocalDateTime.now().plusHours(3)).isEmpty()) {
+                userId, itemId, BookingStatus.APPROVED, LocalDateTime.now()).isEmpty()) {
             throw new ValidationException("Access error");
         }
 
