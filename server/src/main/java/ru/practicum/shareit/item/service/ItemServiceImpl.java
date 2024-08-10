@@ -67,6 +67,7 @@ public class ItemServiceImpl implements ItemService {
                 userId, itemId, BookingStatus.APPROVED, LocalDateTime.now().plusHours(3)).isEmpty()) {
             throw new ValidationException("Access error");
         }
+
         return CommentMapper.toCommentDto(commentRepository.save(Comment.builder()
                .author(userRepository.findById(userId)
                        .orElseThrow(() -> new NotFoundException("User id " + userId + " not found!")))
