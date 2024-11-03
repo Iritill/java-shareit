@@ -1,5 +1,6 @@
 package ru.practicum.shareit.userTest;
 
+import ru.practicum.shareit.config.KafkaSender;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -31,11 +32,14 @@ class UserServiceImplTest {
     private UserRepository userRepository;
     private User user;
     private UserDto userDto;
+    @Autowired
+    private KafkaSender kafkaSender;
 
     @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
-        userService = new UserServiceImpl(userRepository);
+        kafkaSender = mock(KafkaSender.class);
+        userService = new UserServiceImpl(userRepository, kafkaSender);
         user = User.builder()
                 .id(1L)
                 .name("TestUserName")
