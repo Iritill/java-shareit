@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.config.KafkaSender;
 import ru.practicum.shareit.exception.AlreadyExistsException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.dao.UserRepository;
@@ -17,6 +18,7 @@ import java.util.Collection;
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final KafkaSender kafkaSender;
 
     @Override
     public Collection<UserDto> findAll() {
@@ -60,5 +62,6 @@ public class UserServiceImpl implements UserService {
     public void delete(Long userId) {
         log.info("Delete user {}", userId);
         userRepository.deleteById(userId);
+        kafkaSender.sendMessage("Delete user with id: " + userId, "deleteUserEvents");
     }
 }
